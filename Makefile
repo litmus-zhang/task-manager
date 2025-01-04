@@ -12,19 +12,19 @@ stopdb:
 	docker compose down -v --remove-orphans --rmi all
 
 migrateup:
-	migrate -path db/migration -database "$(DB_URL)" -verbose up
+	migrate -path internal/db/migration -database "$(DB_URL)" -verbose up
 
 migrateup1:
-	migrate -path db/migration -database "$(DB_URL)" -verbose up 1
+	migrate -path internal/db/migration -database "$(DB_URL)" -verbose up 1
 
 migratedown:
-	migrate -path db/migration -database "$(DB_URL)" -verbose down
+	migrate -path internal/db/migration -database "$(DB_URL)" -verbose down
 
 migratedown1:
-	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
+	migrate -path internal/db/migration -database "$(DB_URL)" -verbose down 1
 
 new_migration:
-	migrate create -ext sql -dir db/migration -seq $(name)
+	migrate create -ext sql -dir internal/db/migration -seq $(name)
 
 sqlc:
 	sqlc generate
@@ -33,9 +33,9 @@ test:
 	go test -v -cover -short ./...
 
 server:
-	go run main.go
+	go run cmd/main.go
 
 mock:
-	mockgen -package mockdb -destination db/mock/store.go github.com/litmus-zhang/task_manager/db/sqlc Store
+	mockgen -package mockdb -destination internal/db/mock/store.go github.com/litmus-zhang/task_manager/internal/db Store
 
 .PHONY: startdb stopdb migrateup migrateup1 migratedown migratedown1 new_migration sqlc test server mock

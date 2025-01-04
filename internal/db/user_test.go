@@ -6,14 +6,9 @@ import (
 
 	"github.com/litmus-zhang/task-manager/util"
 	"github.com/stretchr/testify/require"
-	"go.uber.org/fx"
-	"go.uber.org/fx/fxtest"
 )
 
 func TestRegisterUser(t *testing.T) {
-	app := fxtest.New(t, fx.NopLogger)
-	app.RequireStart()
-	defer app.RequireStop()
 	hash, err := util.HashPassword(util.RandomString(8))
 	require.NoError(t, err)
 

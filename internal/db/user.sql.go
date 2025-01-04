@@ -10,7 +10,7 @@ import (
 )
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT user_id, username, email, password_hash, subscription_plan_id, subscription_start_date, subscription_end_date, created_at FROM users WHERE email = $1 LIMIT 1
+SELECT user_id, username, email, password_hash, created_at FROM users WHERE email = $1 LIMIT 1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -21,9 +21,6 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Username,
 		&i.Email,
 		&i.PasswordHash,
-		&i.SubscriptionPlanID,
-		&i.SubscriptionStartDate,
-		&i.SubscriptionEndDate,
 		&i.CreatedAt,
 	)
 	return i, err
@@ -31,7 +28,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 
 const registerUser = `-- name: RegisterUser :one
 INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) 
-RETURNING user_id, username, email, password_hash, subscription_plan_id, subscription_start_date, subscription_end_date, created_at
+RETURNING user_id, username, email, password_hash, created_at
 `
 
 type RegisterUserParams struct {
@@ -48,9 +45,6 @@ func (q *Queries) RegisterUser(ctx context.Context, arg RegisterUserParams) (Use
 		&i.Username,
 		&i.Email,
 		&i.PasswordHash,
-		&i.SubscriptionPlanID,
-		&i.SubscriptionStartDate,
-		&i.SubscriptionEndDate,
 		&i.CreatedAt,
 	)
 	return i, err
