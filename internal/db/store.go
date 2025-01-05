@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -18,7 +19,7 @@ type SQLStore struct {
 
 func NewStore(cfg *config.Config) (Store, error) {
 
-	log.Printf("Connecting to %s, %s", cfg.DbSource, cfg.DbDriver)
+	fmt.Printf("Connecting to %s, %s", cfg.DbSource, cfg.DbDriver)
 
 	db, err := sql.Open(cfg.DbDriver, cfg.DbSource)
 	if err != nil {
