@@ -43,6 +43,8 @@ func (server *Server) Start() error {
 	return server.router.Run(server.config.HttpServerAddress)
 }
 
-func errorResponse(err error) gin.H {
-	return gin.H{"error": err.Error()}
+func errResponse(c *gin.Context, code int, message string) {
+	c.JSON(code, gin.H{
+		"error": message,
+	})
 }
