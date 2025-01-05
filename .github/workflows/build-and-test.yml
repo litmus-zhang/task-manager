@@ -39,6 +39,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Vault CLI
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+          sudo apt-get update && sudo apt-get install vault
+
+      - name: Retrieve secrets from Vault
+        env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+          VAULT_PATH: ${{ secrets.VAULT_PATH }}
+        run: |
+          echo "Retrieving secrets from Vault..."
+          vault kv get -format=json $VAULT_PATH > secrets.json
+          export DB_SOURCE=$(jq -r '.data.data.DB_SOURCE' secrets.json)
+          export HTTP_SERVER_ADDRESS=$(jq -r '.data.data.HTTP_SERVER_ADDRESS' secrets.json)
+          export DB_DRIVER=$(jq -r '.data.data.DB_DRIVER' secrets.json)
+          echo "DB_SOURCE=$DB_SOURCE" >> $GITHUB_ENV
+          echo "HTTP_SERVER_ADDRESS=$HTTP_SERVER_ADDRESS" >> $GITHUB_ENV
+          echo "DB_DRIVER=$DB_DRIVER" >> $GITHUB_ENV
+
       - name: install golang migrate
         run: |
           curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.1/migrate.linux-amd64.tar.gz | tar xvz
