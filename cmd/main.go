@@ -8,12 +8,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	VAULT_ADDR  = "http://127.0.0.1:8200"
-	VAULT_TOKEN = "root"
-	VAULT_PATH  = "secret/data/task-manager"
-)
-
 func main() {
 	app := fx.New(
 		config.Module,
