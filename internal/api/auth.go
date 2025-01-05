@@ -12,3 +12,8 @@ func (s *Server) healthCheck(c *gin.Context) {
 	})
 
 }
+
+
+func (s *Server) registerUser(c *gin.Context) {
+
+}

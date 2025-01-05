@@ -9,8 +9,15 @@ import (
 )
 
 type Querier interface {
+	CompleteTask(ctx context.Context, arg CompleteTaskParams) (Task, error)
+	CreateCategory(ctx context.Context, arg CreateCategoryParams) (Category, error)
+	CreateTask(ctx context.Context, arg CreateTaskParams) (Task, error)
+	DeleteTask(ctx context.Context, taskID int32) error
+	GetAllTasksInCategory(ctx context.Context, arg GetAllTasksInCategoryParams) ([]Task, error)
+	GetAllUserCategory(ctx context.Context, arg GetAllUserCategoryParams) ([]Category, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	RegisterUser(ctx context.Context, arg RegisterUserParams) (User, error)
+	UpdateTask(ctx context.Context, arg UpdateTaskParams) (Task, error)
 }
 
 var _ Querier = (*Queries)(nil)

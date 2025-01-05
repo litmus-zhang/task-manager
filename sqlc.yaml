@@ -14,3 +14,8 @@ sql:
       emit_interface: true
       emit_exact_table_names: false
       emit_empty_slices: true
+      overrides:
+        - db_type: "pg_catalog.interval"
+          engine: "postgresql"
+          go_type:
+            type: "string"

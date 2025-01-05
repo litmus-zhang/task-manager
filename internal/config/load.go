@@ -48,9 +48,6 @@ func NewConfig() (*Config, error) {
 		return nil, err
 	}
 
-	log.Printf("Config: %+v", data)
-	log.Printf("All Config: %+v", config)
-
 	return &config, nil
 }
 

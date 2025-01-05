@@ -23,7 +23,7 @@ type Task struct {
 	CategoryID   int32          `json:"category_id"`
 	TaskName     string         `json:"task_name"`
 	Description  sql.NullString `json:"description"`
-	TimelineType int64          `json:"timeline_type"`
+	TimelineType string         `json:"timeline_type"`
 	Priority     string         `json:"priority"`
 	CreatedAt    sql.NullTime   `json:"created_at"`
 	DueDate      time.Time      `json:"due_date"`
@@ -37,4 +37,5 @@ type User struct {
 	Email        string       `json:"email"`
 	PasswordHash string       `json:"password_hash"`
 	CreatedAt    sql.NullTime `json:"created_at"`
+	FullName     string       `json:"full_name"`
 }

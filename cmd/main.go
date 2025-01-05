@@ -19,7 +19,7 @@ func main() {
 		config.Module,
 		db.Module,
 		api.Module,
-		fx.Provide(zap.NewDevelopment),
+		fx.Provide(zap.NewProduction),
 		fx.Invoke(func(lc fx.Lifecycle, cfg *config.Config, server *api.Server) error {
 			return server.Start()
 		}),

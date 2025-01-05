@@ -31,6 +31,9 @@ func (server *Server) setupRouter() {
 
 	api.GET("/health", server.healthCheck)
 
+	auth := api.Group("/auth")
+	auth.POST("/register", server.registerUser)
+
 	server.router = router
 }
 

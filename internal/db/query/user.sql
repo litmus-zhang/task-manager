@@ -1,5 +1,5 @@
 -- name: RegisterUser :one
-INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) 
+INSERT INTO users (username, email, password_hash, full_name) VALUES ($1, $2, $3, $4) 
 RETURNING *;
 
 

@@ -10,7 +10,7 @@ import (
 )
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT user_id, username, email, password_hash, created_at FROM users WHERE email = $1 LIMIT 1
+SELECT user_id, username, email, password_hash, created_at, full_name FROM users WHERE email = $1 LIMIT 1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -22,23 +22,30 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Email,
 		&i.PasswordHash,
 		&i.CreatedAt,
+		&i.FullName,
 	)
 	return i, err
 }
 
 const registerUser = `-- name: RegisterUser :one
-INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) 
-RETURNING user_id, username, email, password_hash, created_at
+INSERT INTO users (username, email, password_hash, full_name) VALUES ($1, $2, $3, $4) 
+RETURNING user_id, username, email, password_hash, created_at, full_name
 `
 
 type RegisterUserParams struct {
 	Username     string `json:"username"`
 	Email        string `json:"email"`
 	PasswordHash string `json:"password_hash"`
+	FullName     string `json:"full_name"`
 }
 
 func (q *Queries) RegisterUser(ctx context.Context, arg RegisterUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, registerUser, arg.Username, arg.Email, arg.PasswordHash)
+	row := q.db.QueryRowContext(ctx, registerUser,
+		arg.Username,
+		arg.Email,
+		arg.PasswordHash,
+		arg.FullName,
+	)
 	var i User
 	err := row.Scan(
 		&i.UserID,
@@ -46,6 +53,7 @@ func (q *Queries) RegisterUser(ctx context.Context, arg RegisterUserParams) (Use
 		&i.Email,
 		&i.PasswordHash,
 		&i.CreatedAt,
+		&i.FullName,
 	)
 	return i, err
 }
