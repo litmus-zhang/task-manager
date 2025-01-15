@@ -39,11 +39,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Vault CLI
-        run: |
-          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-          sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-          sudo apt-get update && sudo apt-get install vault
+      - name: Import Secrets
+        uses: hashicorp/vault-action
+        with:
+          url: https://vault-enterprise.mycompany.com:8200
+          method: token
+          token: ${{ secrets.VAULT_TOKEN }}
+          namespace: admin
+          secrets: |
+            secret/data/ci/aws accessKey | AWS_ACCESS_KEY_ID ;
+            secret/data/ci/aws secretKey | AWS_SECRET_ACCESS_KEY ;
+            secret/data/ci npm_token
 
       - name: Retrieve secrets from Vault
         env:
