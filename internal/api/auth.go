@@ -1,7 +1,9 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/litmus-zhang/momentum-backend/internal/db"
@@ -46,10 +48,56 @@ func (s *Server) registerUser(c *gin.Context) {
 		return
 	}
 
+	// send mail to confirm email
+
 	user.PasswordHash = ""
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User created successfully",
 		"user":    user,
+	})
+
+}
+
+type loginUserRequest struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+func (s *Server) loginUser(c *gin.Context) {
+	var req loginUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		errResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	user, err := s.store.GetUserByEmail(c, req.Email)
+	if err != nil {
+		errResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if err := util.CheckPasswordHash(req.Password, user.PasswordHash); err != nil {
+		errResponse(c, http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	fmt.Printf("user : %v", user)
+
+	// create Access and Refresh token
+	accessToken, _, err := s.tokenMaker.CreateToken(user.Username, time.Duration(s.config.AccessTokenTTL))
+	if err != nil {
+		errResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	refreshToken, _, err := s.tokenMaker.CreateToken(user.Username, time.Duration(s.config.RefreshTokenTTL))
+	if err != nil {
+		errResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":       "User logged in successfully",
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	})
 
 }

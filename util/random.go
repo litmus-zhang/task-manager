@@ -22,3 +22,8 @@ func RandomString(n int) string {
 func RandomInt(min, max int) int {
 	return rand.Intn(max-min) + min
 }
+
+// RandomOwner returns a random owner name
+func RandomOwner() string {
+	return RandomString(6)
+}
