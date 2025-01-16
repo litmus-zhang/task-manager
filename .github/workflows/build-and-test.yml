@@ -1,4 +1,4 @@
-name: Task-Manager server CI/CD
+name: Momentum server CI/CD
 
 on:
   push:

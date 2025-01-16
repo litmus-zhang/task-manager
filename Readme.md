@@ -1,5 +1,6 @@
-# Task Manager
-Getting your task done like never before
+# Momentum
+Smashing your goals through consistent actions
+
 
 
 ### Database setup
