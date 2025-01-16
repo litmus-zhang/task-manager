@@ -1,12 +1,20 @@
 package api
 
 import (
+	"sort"
+
 	"github.com/gin-gonic/gin"
 	"github.com/litmus-zhang/momentum-backend/internal/config"
 	"github.com/litmus-zhang/momentum-backend/internal/db"
+	"github.com/markbates/goth"
+	"github.com/markbates/goth/providers/google"
 	"go.uber.org/zap"
 )
 
+type ProviderIndex struct {
+	Providers    []string
+	ProvidersMap map[string]string
+}
 type Server struct {
 	logger *zap.Logger
 	config *config.Config
@@ -25,7 +33,22 @@ func NewServer(cfg *config.Config, store db.Store, logger *zap.Logger) (*Server,
 	return server, nil
 }
 func (server *Server) setupRouter() {
+	BaseURL := server.config.HttpServerAddress
+	goth.UseProviders(
+		google.New(server.config.GoogleKey, server.config.GoogleSecret, BaseURL+"/auth/google/callback"),
+	)
+
 	router := gin.Default()
+	m := map[string]string{
+		"google": "Google",
+	}
+	var keys []string
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	_ = &ProviderIndex{Providers: keys, ProvidersMap: m}
 
 	api := router.Group("/api/v1")
 
@@ -33,6 +56,8 @@ func (server *Server) setupRouter() {
 
 	auth := api.Group("/auth")
 	auth.POST("/register", server.registerUser)
+	auth.GET("/:provider/callback", server.providerCallback)
+	auth.GET("/:provider", server.providerLogin)
 
 	server.router = router
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/litmus-zhang/momentum-backend/internal/db"
 	"github.com/litmus-zhang/momentum-backend/util"
+	"github.com/markbates/goth/gothic"
 )
 
 func (s *Server) healthCheck(c *gin.Context) {
@@ -50,5 +51,19 @@ func (s *Server) registerUser(c *gin.Context) {
 		"message": "User created successfully",
 		"user":    user,
 	})
+
+}
+
+func (s *Server) providerLogin(c *gin.Context) {
+	gothic.BeginAuthHandler(c.Writer, c.Request)
+}
+func (s *Server) providerCallback(c *gin.Context) {
+	_, err := gothic.CompleteUserAuth(c.Writer, c.Request)
+	if err != nil {
+		errResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// perform check on the user and create the user
 
 }
