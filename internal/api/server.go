@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/litmus-zhang/task-manager/internal/config"
-	"github.com/litmus-zhang/task-manager/internal/db"
+	"github.com/litmus-zhang/momentum-backend/internal/config"
+	"github.com/litmus-zhang/momentum-backend/internal/db"
 	"go.uber.org/zap"
 )
 

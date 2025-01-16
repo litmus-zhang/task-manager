@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/litmus-zhang/task-manager/util"
+	"github.com/litmus-zhang/momentum-backend/util"
 	"github.com/stretchr/testify/require"
 )
 

@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/litmus-zhang/task-manager/internal/config"
-	"github.com/litmus-zhang/task-manager/util"
+	"github.com/litmus-zhang/momentum-backend/internal/config"
+	"github.com/litmus-zhang/momentum-backend/util"
 	"github.com/stretchr/testify/require"
 )
 

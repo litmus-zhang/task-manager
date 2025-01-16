@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/litmus-zhang/task-manager/internal/api"
-	"github.com/litmus-zhang/task-manager/internal/config"
-	"github.com/litmus-zhang/task-manager/internal/db"
+	"github.com/litmus-zhang/momentum-backend/internal/api"
+	"github.com/litmus-zhang/momentum-backend/internal/config"
+	"github.com/litmus-zhang/momentum-backend/internal/db"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )

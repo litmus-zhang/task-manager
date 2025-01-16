@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/litmus-zhang/task-manager/internal/db"
-	"github.com/litmus-zhang/task-manager/util"
+	"github.com/litmus-zhang/momentum-backend/internal/db"
+	"github.com/litmus-zhang/momentum-backend/util"
 )
 
 func (s *Server) healthCheck(c *gin.Context) {

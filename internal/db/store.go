@@ -6,7 +6,7 @@ import (
 	"log"
 
 	_ "github.com/lib/pq"
-	"github.com/litmus-zhang/task-manager/internal/config"
+	"github.com/litmus-zhang/momentum-backend/internal/config"
 )
 
 type Store interface {
